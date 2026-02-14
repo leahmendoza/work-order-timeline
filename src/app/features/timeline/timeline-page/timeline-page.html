@@ -1,37 +1,66 @@
-<div class="page">
-    <header class="header">
-      <div class="title">Work Orders</div>
-  
-      <label class="timescale">
-        <span>Timescale</span>
-        <select>
-          <option value="day">Day</option>
-          <option value="week">Week</option>
-          <option value="month">Month</option>
-        </select>
-      </label>
-    </header>
-  
-    <section class="board">
-      <div class="left">
-        <div class="left__header">Work Center</div>
-        <div class="left__row">Extrusion Line A</div>
-        <div class="left__row">CNC Machine 1</div>
-        <div class="left__row">Assembly Station</div>
-        <div class="left__row">Quality Control</div>
-        <div class="left__row">Packaging Line</div>
+<div class="app-shell">
+    <!-- Top Navigation -->
+    <header class="topbar">
+      <div class="nav-left">
+        <div class="logo-mark"></div>
+        <div class="nav-item active">Dashboard</div>
+        <div class="nav-item">Work orders</div>
       </div>
   
-      <div class="right">
-        <div class="right__header">
-          <div class="right__headerInner">Timeline (scrolls horizontally)</div>
+      <div class="nav-right">
+        <div class="search">
+          <span class="search__icon">⌕</span>
+          <input placeholder="Search" />
         </div>
   
-        <div class="right__row"><div class="right__rowInner"></div></div>
-        <div class="right__row"><div class="right__rowInner"></div></div>
-        <div class="right__row"><div class="right__rowInner"></div></div>
-        <div class="right__row"><div class="right__rowInner"></div></div>
-        <div class="right__row"><div class="right__rowInner"></div></div>
+        <button class="primary">Create</button>
       </div>
-    </section>
-  </div>  
+    </header>
+  
+    <!-- Main Content -->
+    <div class="content">
+      <div class="card">
+        <div class="page-layout">
+          <!-- LEFT: Work Centers -->
+          <div class="work-centers">
+            <div class="wc-header">Work Centers</div>
+  
+            @for (wc of workCenters; track $index) {
+              <div class="wc-row">{{ wc }}</div>
+            }
+          </div>
+  
+          <!-- RIGHT: Timeline -->
+          <div class="timeline-wrapper">
+            <!-- Timeline Header -->
+            <div class="timeline-header">
+              @for (col of grid().columns; track col.start.getTime()) {
+                <div class="col" [style.width.px]="col.widthPx">
+                  {{ col.label }}
+                </div>
+              }
+            </div>
+  
+            <!-- Timeline Scroll Area -->
+            <div #scrollContainer class="timeline-scroll">
+              <!-- Today Line -->
+              <div class="today-line" [style.left.px]="todayOffsetPx()"></div>
+  
+              <!-- Rows -->
+              <div class="timeline-body">
+                @for (_ of rows; track $index) {
+                  <div class="row">
+                    @for (col of grid().columns; track col.start.getTime()) {
+                      <div class="cell" [style.width.px]="col.widthPx"></div>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+          <!-- /RIGHT -->
+        </div>
+      </div>
+    </div>
+  </div>
+  
